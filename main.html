@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Screen Recorder</title>
+</head>
+<body>
+    <h1>Screen Recorder and Display</h1>
+    <button id="startBtn">Start Screen Recording</button>
+    <video id="screenVideo" autoplay controls style="width: 80%; border: 1px solid black;"></video>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const screenVideo = document.getElementById('screenVideo');
+
+        startBtn.addEventListener('click', async () => {
+            try {
+                // Request screen capture
+                const stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: true,
+                    audio: false
+                });
+                
+                // Display the captured screen
+                screenVideo.srcObject = stream;
+
+                // Stop the screen share when the user stops it manually
+                stream.getVideoTracks()[0].addEventListener('ended', () => {
+                    screenVideo.srcObject = null;
+                });
+            } catch (err) {
+                console.error("Error: " + err);
+            }
+        });
+    </script>
+</body>
+</html>
